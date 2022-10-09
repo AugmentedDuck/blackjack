@@ -1,6 +1,8 @@
 let drawnCard = 0;
 let playerScore = 0;
+let playerCards = []
 let dealerScore = 0;
+let dealerCards = []
 let playerHighAces = 0;
 let dealerHighAces = 0;
 let isStanding = false;
@@ -20,43 +22,11 @@ function setup() {
 }
 
 function draw() {
-  background(200);
-
-  let hitButton = createButton("HIT");
-  let standButton = createButton("STAND");
-  let restartButton = createButton("RESTART 50 CHIPS");
-  let doubleButton = createButton("DOUBLE DOWN");
-  let surrenderButton = createButton("SURRENDER 25 CHIPS");
-  let noSurrenderButton = createButton("NOT AVAILABE");
+  background(38, 85, 55);
 
   displayText();
 
-  hitButton.position(10, height / 2);
-  hitButton.size(150);
-  hitButton.mousePressed(playerHit);
-
-  standButton.position(width - 160, height / 2);
-  standButton.size(150);
-  standButton.mousePressed(playerStand);
-
-  restartButton.position(width / 2 - 75, 100);
-  restartButton.size(150);
-  restartButton.mousePressed(gameStart);
-
-  doubleButton.position(10, height / 2 + 25);
-  doubleButton.size(150);
-  doubleButton.mousePressed(doubleDown);
-
-  surrenderButton.position(width / 2 - 170 / 2, 125);
-  surrenderButton.size(170);
-  surrenderButton.mousePressed(surrender);
-
-  noSurrenderButton.position(width / 2 - 170 / 2, -125);
-
-  if (hasPlayerMoved > 2) {
-    noSurrenderButton.position(width / 2 - 170 / 2, 125);
-    noSurrenderButton.size(170);
-  }
+  displayButtons();
 
   playerBustDetector();
 
@@ -80,8 +50,18 @@ function playerHit() {
     } else if (drawnCard == 1) {
       playerScore += 11;
       playerHighAces++;
+      append(playerCards, "A")
     } else {
       playerScore += drawnCard;
+      append(playerCards, str(drawnCard))
+    }
+
+    if (drawnCard == 11) {
+      append(playerCards, "J")
+    } else if (drawnCard == 12) {
+      append(playerCards, "Q")
+    } else if (drawnCard == 13) {
+      append(playerCards, "K")
     }
 
     hasPlayerMoved++;
@@ -96,8 +76,18 @@ function dealerHit() {
   } else if (drawnCard == 1) {
     dealerScore += 11;
     dealerHighAces++;
+    append(dealerCards, "A")
   } else {
     dealerScore += drawnCard;
+    append(dealerCards, str(drawnCard))
+  }
+
+  if (drawnCard == 11) {
+    append(dealerCards, "J")
+  } else if (drawnCard == 12) {
+    append(dealerCards, "Q")
+  } else if (drawnCard == 13) {
+    append(dealerCards, "K")
   }
 }
 
@@ -132,32 +122,23 @@ function whoWon() {
 
 function displayText() {
   textSize(24);
-  text(
-    "Chips: " +
-      chipScore +
-      "\nPlayer: " +
-      playerScore +
-      ", Nr. of Aces: " +
-      playerHighAces +
-      "\nDealer: " +
-      dealerScore +
-      ", Nr. of Aces: " +
-      dealerHighAces,
-    width / 2 - 125,
-    25
-  );
+  textAlign('center')
+  text("Dealer Cards: " + dealerCards + "\nCount: " + dealerScore, width / 2, 30);
+  text("Your Cards: " + playerCards + "\nCount: " + playerScore + "\nChips: " + chipScore, width / 2, height - 270);
 
+  textAlign('left')
   if (chipScore < betAmount) {
-    text("Sorry, not enough chips", width / 2 - 125, 150);
+    text("Sorry, not enough chips", width / 2, 150);
   }
 
+  textAlign('center')
   textSize(40);
   if (isPush) {
     text("Push", width / 2, height / 2);
     chipScore = oldScore + betAmount;
   } else if (isBlackjack) {
     text("Blackjack", width / 2, height / 2);
-    chipScore = oldScore + betAmount * 2 * (3 / 2);
+    chipScore = oldScore + betAmount * 2 + betAmount * (3 / 2);
   } else if (dealerWin) {
     text("Dealer Wins", width / 2, height / 2);
   } else if (playerWin) {
@@ -199,7 +180,9 @@ function gameStart() {
   if (chipScore >= betAmount) {
     drawnCard = 0;
     playerScore = 0;
+    playerCards = [];
     dealerScore = 0;
+    dealerCards = [];
     playerHighAces = 0;
     dealerHighAces = 0;
     isStanding = false;
@@ -233,5 +216,41 @@ function surrender() {
   if (hasPlayerMoved <= 2) {
     chipScore += betAmount / 2;
     gameStart();
+  }
+}
+
+function displayButtons() {
+  let hitButton = createButton("HIT")
+  let standButton = createButton("STAND");
+  let restartButton = createButton("RESTART 50 CHIPS");
+  let doubleButton = createButton("DOUBLE DOWN");
+  let surrenderButton = createButton("SURRENDER 25 CHIPS");
+  let noSurrenderButton = createButton("NOT AVAILABE");
+  
+  standButton.position(width / 2 - 235, height - 190);
+  standButton.size(150, 70);
+  standButton.mousePressed(playerStand);
+
+  hitButton.position(width / 2 - 75, height - 190);
+  hitButton.size(150, 150);
+  hitButton.mousePressed(playerHit);
+
+  restartButton.position(width / 2 + 85, height - 110);
+  restartButton.size(150, 70);
+  restartButton.mousePressed(gameStart);
+
+  doubleButton.position(width / 2 - 235, height - 110);
+  doubleButton.size(150, 70);
+  doubleButton.mousePressed(doubleDown);
+
+  surrenderButton.position(width / 2 + 85, height - 190);
+  surrenderButton.size(150, 70);
+  surrenderButton.mousePressed(surrender);
+
+  noSurrenderButton.position(0, -125);
+
+  if (hasPlayerMoved > 2) {
+    noSurrenderButton.position(width / 2 + 85, height - 190);
+    noSurrenderButton.size(150, 70);
   }
 }
