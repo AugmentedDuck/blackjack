@@ -1,8 +1,8 @@
 let drawnCard = 0;
 let playerScore = 0;
-let playerCards = []
+let playerCards = [];
 let dealerScore = 0;
-let dealerCards = []
+let dealerCards = [];
 let playerHighAces = 0;
 let dealerHighAces = 0;
 let isStanding = false;
@@ -50,18 +50,18 @@ function playerHit() {
     } else if (drawnCard == 1) {
       playerScore += 11;
       playerHighAces++;
-      append(playerCards, "A")
+      append(playerCards, "A");
     } else {
       playerScore += drawnCard;
-      append(playerCards, str(drawnCard))
+      append(playerCards, str(drawnCard));
     }
 
     if (drawnCard == 11) {
-      append(playerCards, "J")
+      append(playerCards, "J");
     } else if (drawnCard == 12) {
-      append(playerCards, "Q")
+      append(playerCards, "Q");
     } else if (drawnCard == 13) {
-      append(playerCards, "K")
+      append(playerCards, "K");
     }
 
     hasPlayerMoved++;
@@ -76,18 +76,18 @@ function dealerHit() {
   } else if (drawnCard == 1) {
     dealerScore += 11;
     dealerHighAces++;
-    append(dealerCards, "A")
+    append(dealerCards, "A");
   } else {
     dealerScore += drawnCard;
-    append(dealerCards, str(drawnCard))
+    append(dealerCards, str(drawnCard));
   }
 
   if (drawnCard == 11) {
-    append(dealerCards, "J")
+    append(dealerCards, "J");
   } else if (drawnCard == 12) {
-    append(dealerCards, "Q")
+    append(dealerCards, "Q");
   } else if (drawnCard == 13) {
-    append(dealerCards, "K")
+    append(dealerCards, "K");
   }
 }
 
@@ -122,16 +122,29 @@ function whoWon() {
 
 function displayText() {
   textSize(24);
-  textAlign('center')
-  text("Dealer Cards: " + dealerCards + "\nCount: " + dealerScore, width / 2, 30);
-  text("Your Cards: " + playerCards + "\nCount: " + playerScore + "\nChips: " + chipScore, width / 2, height - 270);
+  fill(197, 179, 88);
+  textAlign("center");
+  text(
+    "Dealer Cards: " + dealerCards + "\nCount: " + dealerScore,
+    width / 2,
+    30
+  );
+  text(
+    "Your Cards: " +
+      playerCards +
+      "\nCount: " +
+      playerScore +
+      "\nChips: " +
+      chipScore,
+    width / 2,
+    height - 270
+  );
 
-  textAlign('left')
   if (chipScore < betAmount) {
     text("Sorry, not enough chips", width / 2, 150);
   }
 
-  textAlign('center')
+  textAlign("center");
   textSize(40);
   if (isPush) {
     text("Push", width / 2, height / 2);
@@ -220,13 +233,14 @@ function surrender() {
 }
 
 function displayButtons() {
-  let hitButton = createButton("HIT")
+  let hitButton = createButton("HIT");
   let standButton = createButton("STAND");
   let restartButton = createButton("RESTART 50 CHIPS");
   let doubleButton = createButton("DOUBLE DOWN");
+  let noDoubleButton = createButton("NOT AVAILABE");
   let surrenderButton = createButton("SURRENDER 25 CHIPS");
   let noSurrenderButton = createButton("NOT AVAILABE");
-  
+
   standButton.position(width / 2 - 235, height - 190);
   standButton.size(150, 70);
   standButton.mousePressed(playerStand);
@@ -252,5 +266,7 @@ function displayButtons() {
   if (hasPlayerMoved > 2) {
     noSurrenderButton.position(width / 2 + 85, height - 190);
     noSurrenderButton.size(150, 70);
+    noDoubleButton.position(width / 2 - 235, height - 110);
+    noDoubleButton.size(150, 70);
   }
 }
